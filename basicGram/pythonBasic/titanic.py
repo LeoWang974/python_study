@@ -32,3 +32,48 @@ combine = [train_df, test_df]
 for dataset in combine:
     dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
 test_crosstab = pd.crosstab(train_df['Title'], train_df['Sex'])
+
+
+for dataset in combine:
+    dataset['Title'] = dataset['Title'].replace(['Lady', 'Countess', 'Capt', 'Col',
+                                                'Don', 'Dr', 'Major', 'Rev', 'Sir',
+                                                 'Jonkheer', 'Done'], 'Rare')
+    dataset['Title'] = dataset['Title'].replace('Mlle', 'Miss')
+    dataset['Title'] = dataset['Title'].replace('Ms', 'Miss')
+    dataset['Title'] = dataset['Title'].replace('Mme', 'Mrs')
+#print(train_df[['Title', 'Survived']].groupby(['Title'],as_index=False).mean())
+
+title_mapping = {"Mr": 1, "Miss": 2, "Mrs":3, "Master": 4, "Rare": 5}
+for dataset in combine:
+    dataset['Title'] = dataset['Title'].map(title_mapping)
+    dataset['Title'] = dataset['Title'].fillna(0)
+train_df = train_df.drop(['Name', 'PassengerId'], axis=1)
+test_df = test_df.drop(['Name'], axis=1)
+combine = [train_df, test_df]
+train_df.head(3)
+
+guess_ages = np.zeros((2, 3))
+for dataset in combine:
+    for i in range(0, 2):
+        for j in range(0, 3):
+            #此处有问题
+            guess_df = dataset[(dataset['Sex'] == i) & (dataset['Pclass'] == j+1)]['Age'].dropna()
+            print(guess_df)
+            age_guess = guess_df.median()
+
+            guess_ages[i, j] = int(age_guess/0.5 + 0.5) * 0.5
+
+    for i in range(0, 2):
+        for j in range(0, 3):
+            dataset.loc[(dataset.Age.isnull()) & (dataset.Sex == i) & (dataset.Pclass == j+1), 'Age'] = guess_ages[i, j]
+
+    dataset['Age'] = dataset['Age'].astype(int)
+    freq_port = train_df.Embarked.dropna().mode()[0]
+    for dataset in combine:
+        dataset['Embarked'] = dataset['Embarked'].fillna(freq_port)
+        train_df[['Embarked', 'Survived']].groupby(['Embarked'], as_index=False).mean().sort_values(by = 'Survived',
+                                                                                                    ascending=False)
+for dataset in combine:
+    dataset['Embarked'] = dataset['Embarked'].map({'S': 0, 'C': 1, 'Q': 2}).astype(int)
+
+print(train_df.head())

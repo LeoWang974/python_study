@@ -21,7 +21,7 @@ train_df[['Sex', 'Survived']].groupby(['Sex'], as_index=False).mean()\
 
 #年龄与生还概率,绘图，
 g = sns.FacetGrid(train_df, col='Survived')
-g.map(plt.hist, 'Age', bins=20)
+#g.map(plt.hist, 'Age', bins=20)
 
 train_df = train_df.drop(['Ticket', 'Cabin'], axis=1)
 test_df = pd.read_csv('test.csv')

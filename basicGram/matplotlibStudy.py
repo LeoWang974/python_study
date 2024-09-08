@@ -4,7 +4,6 @@ from docutils.nodes import label
 from numpy.ma.core import around
 from mpl_toolkits.mplot3d import Axes3D #3d图像需要引入
 
-"""
 ###########Part1 常用2D图形
 #1.绘制一个简单的图形
 plt.plot([1, 2, 3], [4, 5, 6])
@@ -71,7 +70,7 @@ plt.pie(data, explode=explodes, labels=labels, autopct='%1.2f%%', radius=1, pctd
 
 ###############Part2 常用3D图形
 #1.3D散点图
-fig = plt.figure()  绘制画布
+fig = plt.figure()  #绘制画布
 ax = fig.add_subplot(111, projection='3d')
 x = np.random.randint(0, 100, 500)
 y = np.random.randint(0, 100, 500)
@@ -132,7 +131,7 @@ plt.bar(x, y)
 plt.annotate('第二个柱状图', xy = (1, 20), xytext = (2, 25), arrowprops=dict(facecolor='red', shrink=0.05))   #注释
 plt.title('柱状图')        #标题
 
-********plt.rcParams是matplotlib对象的一个字典，用于配置全局信息
+#********plt.rcParams是matplotlib对象的一个字典，用于配置全局信息
 
 #3.设置图例和标签
 plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -148,16 +147,5 @@ plt.title('二元方法')
 #是Matplotlib库中用于添加图例（legend）的函数。通过 plt.legend()可以将图例添加到您创建的图表中，以提高图表的可读性。
 #例：plt.legend(loc='best', prop={'size': 12}, title='图例标题')
 plt.legend()
-
-
-########Part4 文件操作 Part5图像操作
-"""
-
-
-
-
-
-
-
 
 plt.show()
